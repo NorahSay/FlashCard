@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SentMessageTableViewCell" rowHeight="80" id="KGk-i7-Jjw" customClass="SentMessageTableViewCell" customModule="Flash_Chat" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="81"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="80.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="R3t-Zg-fww" userLabel="Avatar Image View">
+                        <rect key="frame" x="262" y="10" width="53" height="53"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="53" id="JKr-HL-XEN"/>
+                            <constraint firstAttribute="height" constant="53" id="d2B-rh-0v3"/>
+                        </constraints>
+                    </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vOW-q0-HU3" userLabel="Message Background">
+                        <rect key="frame" x="188" y="13" width="68" height="54.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wqo-Wu-dV4" userLabel="Message Body">
+                                <rect key="frame" x="13" y="10" width="42" height="34.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.99997437" blue="0.99999129769999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.1819814891" green="0.69426733259999995" blue="0.53024792669999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Wqo-Wu-dV4" secondAttribute="trailing" constant="13" id="DgD-hP-8AH"/>
+                            <constraint firstAttribute="bottom" secondItem="Wqo-Wu-dV4" secondAttribute="bottom" constant="10" id="SmD-YT-ZwT"/>
+                            <constraint firstItem="Wqo-Wu-dV4" firstAttribute="leading" secondItem="vOW-q0-HU3" secondAttribute="leading" constant="13" id="wOn-TP-SCR"/>
+                            <constraint firstItem="Wqo-Wu-dV4" firstAttribute="top" secondItem="vOW-q0-HU3" secondAttribute="top" constant="10" id="z99-H1-4ZY"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="R3t-Zg-fww" firstAttribute="leading" secondItem="vOW-q0-HU3" secondAttribute="trailing" constant="6" id="Nug-cc-gW3"/>
+                    <constraint firstItem="R3t-Zg-fww" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="aBG-6l-lR9"/>
+                    <constraint firstItem="vOW-q0-HU3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="guR-FB-gzq"/>
+                    <constraint firstItem="vOW-q0-HU3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="mkP-sL-UcM"/>
+                    <constraint firstAttribute="trailing" secondItem="R3t-Zg-fww" secondAttribute="trailing" constant="5" id="t0a-GQ-6AO"/>
+                    <constraint firstAttribute="bottom" secondItem="vOW-q0-HU3" secondAttribute="bottom" constant="13" id="t8X-Y5-meU"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="avatarImageView" destination="R3t-Zg-fww" id="3BB-Rz-TRF"/>
+                <outlet property="messageBackground" destination="vOW-q0-HU3" id="g98-ac-JeX"/>
+                <outlet property="messageBody" destination="Wqo-Wu-dV4" id="ZIq-Sp-FB7"/>
+            </connections>
+            <point key="canvasLocation" x="52.799999999999997" y="48.125937031484263"/>
+        </tableViewCell>
+    </objects>
+</document>
