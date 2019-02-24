@@ -10,16 +10,19 @@ import UIKit
 import Firebase
 import ChameleonFramework
 
-class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     // Declare instance variables here
     var messageArray : [Message] = [Message]()
+    var text : String = ""
+    var images : UIImage?
     
     // We've pre-linked the IBOutlets
     @IBOutlet var heightConstraint: NSLayoutConstraint!
     @IBOutlet var sendButton: UIButton!
-    @IBOutlet var messageTextfield: UITextField!
+    @IBOutlet var messageTextView: UITextView!
     @IBOutlet var messageTableView: UITableView!
+    @IBOutlet weak var cameraButton: UIButton!
     
     
     
@@ -27,13 +30,14 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
         sendButton.isEnabled = false
+        cameraButton.imageView?.contentMode = .scaleAspectFit
         
         //TODO: Set yourself as the delegate and datasource here:
         messageTableView.delegate = self
         messageTableView.dataSource = self
         
         //TODO: Set yourself as the delegate of the text field here:
-        messageTextfield.delegate = self
+        messageTextView.delegate = self
         
         //TODO: Set the tapGesture here:
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dimissKeyboard(_:)))
@@ -47,7 +51,15 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         configureTableView()
         retrieveMessages()
         
+        //TableViewStyle
         messageTableView.separatorStyle = .none
+        
+        //messageTextView Style
+        messageTextView.clipsToBounds = true
+        messageTextView.layer.cornerRadius = 10.0
+        messageTextView.text = "Enter Your Message"
+        messageTextView.textColor = UIColor.lightGray
+        
     }
 
     ///////////////////////////////////////////
@@ -99,31 +111,39 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     ///////////////////////////////////////////
     
-    //MARK:- TextField Delegate Methods
+    //MARK:- TextView Delegate Methods
+    
 
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        var newText = textField.text! as NSString
-        newText = newText.replacingCharacters(in: range, with: string) as NSString
-        
-        //Enable or diable send button
-        if newText == "" {
-            sendButton.isEnabled = false
-        } else {
-            sendButton.isEnabled = true
-        }
-        return true
-    }
-    //TODO: Declare textFieldDidBeginEditing here:
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification , object: nil)
-        
-        
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+            var newText = textView.text! as NSString
+            newText = newText.replacingCharacters(in: range, with: text) as NSString
+
+            //Enable or diable send button
+            if newText == "" {
+                sendButton.isEnabled = false
+            } else {
+                sendButton.isEnabled = true
+            }
+            return true
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        sendPressed(self)
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification , object: nil)
         return true
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = ""
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Enter Your Message"
+            textView.textColor = UIColor.lightGray
+        }
     }
     
     //TODO: Declare textFieldDidEndEditing here:
@@ -133,9 +153,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.view.endEditing(true)
         
     }
+    
 
-    
-    
     // MARK - Handle Keyboards
     
     @objc func keyboardWillShow(notification: NSNotification)    {
@@ -191,20 +210,18 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification , object: nil)
         
         //TODO: Send the message to Firebase and save it in our database
-        messageTextfield.isEnabled = false
         sendButton.isEnabled = false
         
         let messagesDB = Database.database().reference().child("Message")
         let messageDictionary = ["Sender" : Auth.auth().currentUser?.email,
-                                 "MessageBody" : messageTextfield.text!]
+                                 "MessageBody" : messageTextView.text!] as [String : Any]
         messagesDB.childByAutoId().setValue(messageDictionary) {
             (error, reference) in
             if error != nil {
                 print(error!)
             } else {
                 print("message saved")
-                self.messageTextfield.isEnabled = true
-                self.messageTextfield.text = ""
+                self.messageTextView.text = ""
             }
         }
         
@@ -251,7 +268,29 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    
+    // MARK: Camera button
+    @IBAction func cameraPressed(_ sender: UIButton) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage {
+            images = image
+            dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
 
 
 }
+
+
+
 
